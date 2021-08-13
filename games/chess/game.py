@@ -90,18 +90,14 @@ class Game:
         info = None
         return ((next_state, value, done, info))
 
-    # def identities(self, state, actionValues):
-        # nie wiem o co tu chodzi, jutro ogarne :) :) :) :) :) :)
-        # czas na lola
-    
-    # def move(self,current_gamestate: GameState, move: str):
-    #     newstate = GameState(current_gamestate.board)
-    #     newstate.board.push(chess.Move.from_uci(move))
-    #     self.history.append(move)
-    #     return newstate
+    def identities(self, state, actionValues):
+
+        identities  = [(state, actionValues), (state, actionValues)]
+        return identities
 
 
 class GameState:
+
     def __init__(self, board: chess.Board, playerTurn):
         self.board = board
         self.pieceOrder = ['K','Q','R','B','N','P','k','q','r','b','n','p']
@@ -114,7 +110,6 @@ class GameState:
         self.score = self._getScore()
         self.isEndGame = self._checkForEndGame()
         self.id = self._convertStateToId()
-
 
     def board_to_tensor(self):
         order_piecenames = [chess.KING, chess.QUEEN, chess.ROOK, chess.BISHOP, chess.KNIGHT, chess.PAWN]
