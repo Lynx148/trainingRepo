@@ -69,7 +69,7 @@ def tensor_to_board(tensor: np.ndarray):
 class Game:
     def __init__(self):
         self.currentPlayer = 1
-        self.gameState = GameState(chess.Board('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'), 1)
+        self.gameState = GameState(chess.Board('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'), 1)
         self.actionSpace = self.gameState.movelist
         self.pieceOrder = ['K','Q','R','B','N','P','k','q','r','b','n','p']
         self.input_shape = (2,6,8,8)
