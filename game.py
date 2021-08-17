@@ -87,7 +87,8 @@ class Game:
 
         next_state, value, done = self.gameState.takeAction(action)
         self.gameState = next_state
-        self.currentPlayer = -self.currentPlayer
+        # self.currentPlayer = -self.currentPlayer
+        self.currentPlayer = 1 if self.currentPlayer == 0 else 0
         info = None
         return ((next_state, value, done, info))
 
@@ -160,7 +161,8 @@ class GameState:
     def takeAction(self,action):
         newBoard = self.board.copy()
         newBoard.push(chess.Move.from_uci(self.movelist[action]))
-        newState = GameState(newBoard,-self.playerTurn)
+        turn = 1 if self.playerTurn == 0 else 0
+        newState = GameState(newBoard,turn)
         value=0
         done=0
         if newState.isEndGame:
