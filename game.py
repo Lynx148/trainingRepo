@@ -73,7 +73,7 @@ class Game:
         self.actionSpace = self.gameState.movelist
         self.pieceOrder = ['K','Q','R','B','N','P','k','q','r','b','n','p']
         self.input_shape = (2,6,8,8)
-        self.grid_shape =
+        self.grid_shape = (8, 8)
         self.name = 'chess'
         self.state_size = self.gameState.binary.shape
         self.action_size = len(self.actionSpace)
@@ -94,7 +94,7 @@ class Game:
 
     def identities(self, state, actionValues):
 
-        identities  = [(state, actionValues), (state, actionValues)]
+        identities = [(state, actionValues), (state, actionValues)]
         return identities
 
 
@@ -142,24 +142,36 @@ class GameState:
     def _convertStateToId(self):
         return self.board.epd()[:-6]
 
-    def _checkForEndGame(self) -> bool:
-        if self.board.is_checkmate() or self.board.is_stalemate():
+    def _checkForEndGame(self) -> int:
+
+        conditions = np.array([self.board.is_checkmate(), self.board.is_stalemate(), self.board.is_insufficient_material()])
+        if np.any(conditions):
             return 1
         else:
             return 0
 
+    # def _getValue(self) -> tuple:
+    #     conditions = np.array([self.board.is_checkmate(), self.board.is_stalemate(), self.board.is_insufficient_material()])
+    #     if np.any(conditions):
+    #         return (-1, -1, -1)
+    #     else:
+    #         return (0, 0, 0)
+
     def _getValue(self) -> tuple:
-        if self.board.is_checkmate() or self.board.is_stalemate():
-            return (-1, -1, -1)
+        res = self.board.result()
+        if self.playerTurn == 1 and res == "0-1":
+            return (-1,-1,-1)
+        elif self.playerTurn == 0 and res == "1-0":
+            return (-1,-1,-1)
         else:
-            return (0, 0, 0)
+            return (0,0,0)
 
     def _getScore(self) -> tuple:
         tmp = self.value
         return(tmp[1],tmp[2])
 
     def takeAction(self,action):
-        newBoard = self.board.copy()
+        newBoard = self.board
         newBoard.push(chess.Move.from_uci(self.movelist[action]))
         turn = 1 if self.playerTurn == 0 else 0
         newState = GameState(newBoard,turn)
