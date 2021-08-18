@@ -1,6 +1,6 @@
 import numpy as np
 import random
-
+import pandas as pd
 import loggers as lg
 
 from game import Game, GameState
@@ -9,6 +9,10 @@ from model import Residual_CNN
 from agent import Agent, User
 
 import config
+
+
+def movelist() -> np.ndarray:
+    return np.squeeze(pd.read_csv('movelist.txt', delimiter='\n', header=None).values)
 
 
 def playMatchesBetweenVersions(env, run_version, player1version, player2version, EPISODES, logger, turns_until_tau0,
@@ -83,7 +87,9 @@ def playMatches(player1, player2, EPISODES, logger, turns_until_tau0, memory=Non
 
         while done == 0:
             turn = turn + 1
-
+            if turn % 10:
+                print(turn)
+                print(state.board)
             #### Run the MCTS algo and return an action
             if turn < turns_until_tau0:
                 action, pi, MCTS_value, NN_value = players[state.playerTurn]['agent'].act(state, 1)
@@ -94,7 +100,7 @@ def playMatches(player1, player2, EPISODES, logger, turns_until_tau0, memory=Non
                 ####Commit the move to memory
                 memory.commit_stmemory(env.identities, state, pi)
 
-            logger.info('action: %d', action)
+            logger.info('action: %d', movelist()[action])
             # for r in range(env.grid_shape[0]):
             #     logger.info(['----' if x == 0 else '{0:.2f}'.format(np.round(x,2)) for x in pi[env.grid_shape[1]*r : (env.grid_shape[1]*r + env.grid_shape[1])]])
             logger.info('MCTS perceived value for %s: %f', state.pieces[str(state.playerTurn)], np.round(MCTS_value, 2))
@@ -106,6 +112,9 @@ def playMatches(player1, player2, EPISODES, logger, turns_until_tau0, memory=Non
                 action)  # the value of the newState from the POV of the new playerTurn i.e. -1 if the previous player played a winning move
 
             env.gameState.render(logger)
+            if turn >= 75:
+                done = 1
+                value = 0.5
 
             if done == 1:
                 if memory != None:
@@ -127,8 +136,8 @@ def playMatches(player1, player2, EPISODES, logger, turns_until_tau0, memory=Non
                         sp_scores['nsp'] = sp_scores['nsp'] + 1
 
                 elif value == -1:
-                    logger.info('%s WINS!', players[-state.playerTurn]['name'])
-                    scores[players[-state.playerTurn]['name']] = scores[players[-state.playerTurn]['name']] + 1
+                    logger.info('%s WINS!', players[1 if state.playerTurn == 0 else 0]['name'])
+                    scores[players[1 if state.playerTurn == 0 else 0]['name']] = scores[players[1 if state.playerTurn == 0 else 0]['name']] + 1
 
                     if state.playerTurn == 1:
                         sp_scores['nsp'] = sp_scores['nsp'] + 1
