@@ -50,6 +50,7 @@ def playMatches(player1, player2, EPISODES, logger, turns_until_tau0, memory=Non
     scores = {player1.name: 0, "drawn": 0, player2.name: 0}
     sp_scores = {'sp': 0, "drawn": 0, 'nsp': 0}
     points = {player1.name: [], player2.name: []}
+    ml = movelist()
 
     for e in range(EPISODES):
 
@@ -87,7 +88,7 @@ def playMatches(player1, player2, EPISODES, logger, turns_until_tau0, memory=Non
 
         while done == 0:
             turn = turn + 1
-            if turn % 10:
+            if turn % 10 == 0:
                 print(turn)
                 print(state.board)
             #### Run the MCTS algo and return an action
@@ -100,7 +101,7 @@ def playMatches(player1, player2, EPISODES, logger, turns_until_tau0, memory=Non
                 ####Commit the move to memory
                 memory.commit_stmemory(env.identities, state, pi)
 
-            logger.info('action: %d', movelist()[action])
+            logger.info('action: %s', ml[action])
             # for r in range(env.grid_shape[0]):
             #     logger.info(['----' if x == 0 else '{0:.2f}'.format(np.round(x,2)) for x in pi[env.grid_shape[1]*r : (env.grid_shape[1]*r + env.grid_shape[1])]])
             logger.info('MCTS perceived value for %s: %f', state.pieces[str(state.playerTurn)], np.round(MCTS_value, 2))
@@ -112,7 +113,7 @@ def playMatches(player1, player2, EPISODES, logger, turns_until_tau0, memory=Non
                 action)  # the value of the newState from the POV of the new playerTurn i.e. -1 if the previous player played a winning move
 
             env.gameState.render(logger)
-            if turn >= 75:
+            if turn >= 150:
                 done = 1
                 value = 0.5
 
