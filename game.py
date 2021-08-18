@@ -72,6 +72,7 @@ class Game:
         self.gameState = GameState(chess.Board('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR'), 1)
         self.actionSpace = self.gameState.movelist
         self.pieceOrder = ['K','Q','R','B','N','P','k','q','r','b','n','p']
+        self.pieces = {'1':"WHITE", '0': "BLACK"}
         self.input_shape = (2,6,8,8)
         self.grid_shape = (8, 8)
         self.name = 'chess'
@@ -103,6 +104,7 @@ class GameState:
     def __init__(self, board: chess.Board, playerTurn):
         self.board = board
         self.pieceOrder = ['K','Q','R','B','N','P','k','q','r','b','n','p']
+        self.pieces = {'1':"WHITE", '0': "BLACK"}
         self.playerTurn = playerTurn
         self.board.turn = playerTurn
         self.allowedActions = self._allowedActions()
@@ -171,10 +173,11 @@ class GameState:
         return(tmp[1],tmp[2])
 
     def takeAction(self,action):
-        newBoard = self.board
+        newBoard = self.board.copy()
         newBoard.push(chess.Move.from_uci(self.movelist[action]))
         turn = 1 if self.playerTurn == 0 else 0
         newState = GameState(newBoard,turn)
+        del newBoard
         value=0
         done=0
         if newState.isEndGame:
