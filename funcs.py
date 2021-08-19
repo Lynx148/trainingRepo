@@ -89,8 +89,7 @@ def playMatches(player1, player2, EPISODES, logger, turns_until_tau0, memory=Non
         while done == 0:
             turn = turn + 1
             if turn % 10 == 0:
-                print(turn)
-                print(state.board)
+                print("TURN:", turn)
             #### Run the MCTS algo and return an action
             if turn < turns_until_tau0:
                 action, pi, MCTS_value, NN_value = players[state.playerTurn]['agent'].act(state, 1)
@@ -113,9 +112,11 @@ def playMatches(player1, player2, EPISODES, logger, turns_until_tau0, memory=Non
                 action)  # the value of the newState from the POV of the new playerTurn i.e. -1 if the previous player played a winning move
 
             env.gameState.render(logger)
-            if turn >= 150:
+            if turn >= 75:
                 done = 1
                 value = 0.5
+                print("\n###\n")
+                print(len(player1.mcts.tree))
 
             if done == 1:
                 if memory != None:
