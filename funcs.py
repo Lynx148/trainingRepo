@@ -112,11 +112,13 @@ def playMatches(player1, player2, EPISODES, logger, turns_until_tau0, memory=Non
                 action)  # the value of the newState from the POV of the new playerTurn i.e. -1 if the previous player played a winning move
 
             env.gameState.render(logger)
-            if turn >= 75:
+            if turn >= 40:
                 done = 1
-                value = 0.5
-                print("\n###\n")
-                print(len(player1.mcts.tree))
+                value = env.gameState.get_value_alpha()
+                print("\n###")
+                print("tree length:", len(player1.mcts.tree))
+                print("value: ", value)
+                print("###\n")
 
             if done == 1:
                 if memory != None:
