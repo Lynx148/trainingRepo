@@ -97,6 +97,8 @@ class Game:
 
         identities = [(state, actionValues), (state, actionValues)]
         return identities
+    
+
 
 
 class GameState:
@@ -158,11 +160,13 @@ class GameState:
     #         return (-1, -1, -1)
     #     else:
     #         return (0, 0, 0)
-    
+
     def get_leader(self):
         scores = np.array([4,9,5,3,3,1])
         white = np.sum(np.array([np.sum(piece) for piece in self.board_to_tensor()[:6]]) * scores)
+        print("White score: ", white)
         black = np.sum(np.array([np.sum(piece) for piece in self.board_to_tensor()[6:12]]) * scores)
+        print("Black score: ", black)
         if white > black:
             return 1
         elif black > white:
@@ -189,7 +193,8 @@ class GameState:
             return (0,0,0)
 
     def _getScore(self) -> tuple:
-        tmp = self.value
+        tmp = self.get_value_alpha()
+        #zmieniono z tmp = self.value
         return(tmp[1],tmp[2])
 
     def takeAction(self,action):

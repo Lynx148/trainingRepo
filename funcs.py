@@ -88,8 +88,7 @@ def playMatches(player1, player2, EPISODES, logger, turns_until_tau0, memory=Non
 
         while done == 0:
             turn = turn + 1
-            if turn % 10 == 0:
-                print("TURN:", turn)
+            print(turn,end=' ')
             #### Run the MCTS algo and return an action
             if turn < turns_until_tau0:
                 action, pi, MCTS_value, NN_value = players[state.playerTurn]['agent'].act(state, 1)
@@ -114,10 +113,12 @@ def playMatches(player1, player2, EPISODES, logger, turns_until_tau0, memory=Non
             env.gameState.render(logger)
             if turn >= 40:
                 done = 1
-                value = env.gameState.get_value_alpha()
+                value = env.gameState.get_value_alpha()[0]
                 print("\n###")
                 print("tree length:", len(player1.mcts.tree))
                 print("value: ", value)
+                print("winner: ", env.gameState.get_leader(), "1 for white, 0 for black")
+                print("Board: ", env.gameState.board)
                 print("###\n")
 
             if done == 1:
@@ -155,6 +156,6 @@ def playMatches(player1, player2, EPISODES, logger, turns_until_tau0, memory=Non
 
                 pts = state.score
                 points[players[state.playerTurn]['name']].append(pts[0])
-                points[players[-state.playerTurn]['name']].append(pts[1])
+                points[players[1 if state.playerTurn == 0 else 0]['name']].append(pts[1])
 
     return (scores, memory, points, sp_scores)
