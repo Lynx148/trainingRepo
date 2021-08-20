@@ -58,8 +58,8 @@ def playMatches(player1, player2, EPISODES, logger, turns_until_tau0, memory=Non
         logger.info('EPISODE %d OF %d', e + 1, EPISODES)
         logger.info('====================')
 
-        print(str(e + 1) + ' ', end='')
-
+        # print(str(e + 1) + ' ', end='')
+        print("\nEpisode", e+1)
         state = env.reset()
 
         done = 0
@@ -77,18 +77,20 @@ def playMatches(player1, player2, EPISODES, logger, turns_until_tau0, memory=Non
                 , 0: {"agent": player2, "name": player2.name}
                        }
             logger.info(player1.name + ' plays as white')
+            print(player1.name, ' plays as white')
         else:
             players = {1: {"agent": player2, "name": player2.name}
                 , 0: {"agent": player1, "name": player1.name}
                        }
             logger.info(player2.name + ' plays as white')
+            print(player2.name, ' plays as white')
             logger.info('--------------')
 
         env.gameState.render(logger)
 
         while done == 0:
             turn = turn + 1
-            print(turn,end=' ')
+            # print(turn,end=' ')
             #### Run the MCTS algo and return an action
             if turn < turns_until_tau0:
                 action, pi, MCTS_value, NN_value = players[state.playerTurn]['agent'].act(state, 1)
@@ -115,10 +117,16 @@ def playMatches(player1, player2, EPISODES, logger, turns_until_tau0, memory=Non
                 done = 1
                 value = env.gameState.get_value_alpha()[0]
                 print("\n###")
-                print("tree length:", len(player1.mcts.tree))
-                print("value: ", value)
-                print("winner: ", env.gameState.get_leader(), "1 for white, 0 for black")
-                print("Board: ", env.gameState.board)
+                # print("tree length:", len(player1.mcts.tree))
+                # print("value: ", value)
+                if env.gameState.get_leader() == 1:
+                  winner_print = "white"
+                elif env.gameState.get_leader() == 0:
+                  winner_print = "black"
+                else:
+                  winner_print = "draw"
+                print("winner: ", winner_print)
+                print("Board: ", env.gameState.board.fen())
                 print("###\n")
 
             if done == 1:
