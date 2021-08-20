@@ -158,7 +158,27 @@ class GameState:
     #         return (-1, -1, -1)
     #     else:
     #         return (0, 0, 0)
-
+    
+    def get_leader(self):
+        scores = np.array([4,9,5,3,3,1])
+        white = np.sum(np.array([np.sum(piece) for piece in self.board_to_tensor()[:6]]) * scores)
+        black = np.sum(np.array([np.sum(piece) for piece in self.board_to_tensor()[6:12]]) * scores)
+        if white > black:
+            return 1
+        elif black > white:
+            return 0
+        else:
+            return -1
+        
+    def get_value_alpha(self):
+        leader = self.get_leader()
+        if self.playerTurn == 0 and leader == 1:
+            return (-1,-1,-1)
+        elif self.playerTurn == 1 and leader == 0:
+            return (-1,-1,-1)
+        else:
+            return (0,0,0)
+        
     def _getValue(self) -> tuple:
         res = self.board.result()
         if self.playerTurn == 1 and res == "0-1":
