@@ -164,9 +164,7 @@ class GameState:
     def get_leader(self):
         scores = np.array([4,9,5,3,3,1])
         white = np.sum(np.array([np.sum(piece) for piece in self.board_to_tensor()[:6]]) * scores)
-        print("White score: ", white)
         black = np.sum(np.array([np.sum(piece) for piece in self.board_to_tensor()[6:12]]) * scores)
-        print("Black score: ", black)
         if white > black:
             return 1
         elif black > white:
