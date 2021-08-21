@@ -1,4 +1,3 @@
-
 from utils import setup_logger
 from settings import run_folder
 
@@ -10,7 +9,8 @@ LOGGER_DISABLED = {
 , 'memory':False
 , 'tourney':False
 , 'mcts':False
-, 'model': False}
+, 'model': False
+, 'training': False}
 
 
 logger_mcts = setup_logger('logger_mcts', run_folder + 'logs/logger_mcts.log')
@@ -28,3 +28,5 @@ logger_memory.disabled = LOGGER_DISABLED['memory']
 logger_model = setup_logger('logger_model', run_folder + 'logs/logger_model.log')
 logger_model.disabled = LOGGER_DISABLED['model']
  
+logger_training = setup_logger('logger_training', run_folder + 'logs/logger_training.log')
+logger_training.disabled = LOGGER_DISABLED['training']
