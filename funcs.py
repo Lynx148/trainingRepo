@@ -164,6 +164,10 @@ def playMatches(player1, player2, EPISODES, logger, turns_until_tau0, memory=Non
 
                 pts = state.score
                 points[players[state.playerTurn]['name']].append(pts[0])
-                points[players[1 if state.playerTurn == 0 else 0]['name']].append(pts[1])
+                points[players[1 if state.playerTurn == 0 else 0]['name']].append(-pts[1])
+                logger.info("#####")
+                logger.info(points)
+                logger.info("#####")
+
 
     return (scores, memory, points, sp_scores)
