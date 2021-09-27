@@ -178,6 +178,10 @@ class GameState:
             return (-1,-1,-1)
         elif self.playerTurn == 1 and leader == 0:
             return (-1,-1,-1)
+        elif self.playerTurn == 1 and leader == 1:
+            return (1,1,1)
+        elif self.playerTurn == 0 and leader == 0:
+            return (1,1,1)
         else:
             return (0,0,0)
         
