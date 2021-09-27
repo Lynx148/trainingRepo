@@ -213,6 +213,7 @@ class GameState:
         return (newState,value,done)
 
     def render(self,logger):
-        logger.info("\n" + str(self.board))
-        logger.info('-----------------')
+        # logger.info("\n" + str(self.board))
+        # logger.info('-----------------')
+        logger.info(str(self.board.fen()))
 
