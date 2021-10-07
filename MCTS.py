@@ -53,14 +53,15 @@ class MCTS():
 
 		breadcrumbs = []
 		currentNode = self.root
+		# print(len(currentNode.edges), end=',')
 
 		done = 0
 		value = 0
-
+		action_history = []
 		while not currentNode.isLeaf():
 
 			lg.logger_mcts.info('PLAYER TURN...%d', currentNode.state.playerTurn)
-		
+
 			maxQU = -99999
 
 			if currentNode == self.root:
@@ -90,13 +91,15 @@ class MCTS():
 					maxQU = Q + U
 					simulationAction = action
 					simulationEdge = edge
-
+			action_history.append(simulationAction)
 			lg.logger_mcts.info('action with highest Q + U...%d', simulationAction)
 
 			newState, value, done = currentNode.state.takeAction(simulationAction) #the value of the newState from the POV of the new playerTurn
 			currentNode = simulationEdge.outNode
 			breadcrumbs.append(simulationEdge)
-
+			if action_history.count(simulationAction) > 15:
+				lg.logger_mcts.info('DONE CONDITIONALLY')
+				return currentNode, value, done, breadcrumbs
 		lg.logger_mcts.info('DONE...%d', done)
 
 		return currentNode, value, done, breadcrumbs

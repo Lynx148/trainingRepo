@@ -4,8 +4,8 @@ import numpy as np
 import random
 
 import MCTS as mc
-from game import GameState
-from loss import softmax_cross_entropy_with_logits
+# from game import GameState
+# from loss import softmax_cross_entropy_with_logits
 
 import config
 import loggers as lg
@@ -14,6 +14,7 @@ import time
 import matplotlib.pyplot as plt
 from IPython import display
 import pylab as pl
+import moves
 
 
 class User():
@@ -77,14 +78,15 @@ class Agent():
 			self.buildMCTS(state)
 		else:
 			self.changeRootMCTS(state)
-
+		# print("simulating started\t", end='')
 		#### run the simulation
 		for sim in range(self.MCTSsimulations):
 			lg.logger_mcts.info('***************************')
 			lg.logger_mcts.info('****** SIMULATION %d ******', sim + 1)
 			lg.logger_mcts.info('***************************')
+			# print("sim:" + str(sim+1), end=':')
 			self.simulate()
-
+		# print("simulating finished: ", end='')
 		#### get action values
 		pi, values = self.getAV(1)
 
@@ -99,7 +101,7 @@ class Agent():
 		lg.logger_mcts.info('CHOSEN ACTION...%d', action)
 		lg.logger_mcts.info('MCTS PERCEIVED VALUE...%f', value)
 		lg.logger_mcts.info('NN PERCEIVED VALUE...%f', NN_value)
-
+		# print(moves.movelist[action])
 		return (action, pi, value, NN_value)
 
 
@@ -205,7 +207,7 @@ class Agent():
 		plt.plot(self.train_policy_loss, 'k--')
 
 		plt.legend(['train_overall_loss', 'train_value_loss', 'train_policy_loss'], loc='lower left')
-
+		plt.savefig(r"C:\Users\jasak\PycharmProjects\pythonProject\run\plot\plot.jpg")
 		display.clear_output(wait=True)
 		display.display(pl.gcf())
 		pl.gcf().clear()
